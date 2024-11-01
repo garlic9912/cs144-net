@@ -9,8 +9,24 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
-  cerr << "Warning: get_URL() has not been implemented yet.\n";
+  // host: cs144.keithw.org
+  // path: /hello
+  TCPSocket sock;
+  sock.connect(Address(host, "http"));
+
+  // 构造 HTTP 请求
+  string request = "GET " + path + " HTTP/1.1\r\n"
+                        "Host: " + host + "\r\n"
+                        "Connection: close\r\n\r\n"; 
+  sock.write(request);
+  sock.shutdown(SHUT_WR);
+  string buf;
+  while(!sock.eof()){
+      sock.read(buf);
+      cout << buf;
+  }
+  sock.close();
+  return;  
 }
 
 int main( int argc, char* argv[] )
@@ -20,6 +36,9 @@ int main( int argc, char* argv[] )
       abort(); // For sticklers: don't try to access argv[0] if argc <= 0.
     }
 
+    // auto 由编译器用于自动推导变量的类型
+    // std::span 可以看作是一个智能指针，但它不管理内存的生命周期，只是提供了一个安全的方式来访问已存在的数据
+    // 创建了一个span类型，用来随机存取数据
     auto args = span( argv, argc );
 
     // The program takes two command-line arguments: the hostname and "path" part of the URL.
