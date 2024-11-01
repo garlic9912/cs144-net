@@ -18,6 +18,9 @@ void get_URL( const string& host, const string& path )
   string request = "GET " + path + " HTTP/1.1\r\n"
                         "Host: " + host + "\r\n"
                         "Connection: close\r\n\r\n"; 
+
+  // 这一行代码的作用是关闭Socket的写端
+  // 表示你不再向服务器发送数据，但仍然可以接收来自服务器的数据
   sock.write(request);
   sock.shutdown(SHUT_WR);
   string buf;
