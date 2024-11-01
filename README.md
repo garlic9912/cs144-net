@@ -19,7 +19,4 @@ To run speed benchmarks: `cmake --build build --target speed`
 To run clang-tidy (which suggests improvements): `cmake --build build --target tidy`
 
 To format code: `cmake --build build --target format`
-=======
-# cs144-net
-斯坦福cs144计算机网络实验，c++实现tcp/ip协议
->>>>>>> 67920f3970624f276cbf405c8ff3b3321dfea66c
+
