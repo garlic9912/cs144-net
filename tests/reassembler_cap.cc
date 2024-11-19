@@ -33,7 +33,7 @@ int main()
       test.execute( Insert { "ab", 0 } );
       test.execute( BytesPushed( 2 ) );
       test.execute( BytesPending( 0 ) );
-
+      
       test.execute( Insert { "cd", 2 } );
       test.execute( BytesPushed( 2 ) );
       test.execute( BytesPending( 0 ) );

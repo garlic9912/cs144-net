@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <set>
 
 class Reader;
 class Writer;
@@ -21,10 +22,20 @@ public:
   void set_error() { error_ = true; };       // Signal that the stream suffered an error.
   bool has_error() const { return error_; }; // Has the stream had an error?
 
+
 protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
-  uint64_t capacity_;
-  bool error_ {};
+
+  // ByteStream
+  std::string buffer_ = "";
+  uint64_t used_ = 0;
+  uint64_t capacity_ = 0;
+
+  bool endflag_ = false;
+  bool error_ = false;
+
+  uint64_t total_push_ = 0;
+  uint64_t total_pop_ = 0;
 };
 
 class Writer : public ByteStream
@@ -33,6 +44,7 @@ public:
   void push( std::string data ); // Push data to stream, but only as much as available capacity allows.
   void close();                  // Signal that the stream has reached its ending. Nothing more will be written.
 
+  // 函数后面的 const, 表示该成员函数不会修改对象的任何成员变量, 被称为“常量成员函数”
   bool is_closed() const;              // Has the stream been closed?
   uint64_t available_capacity() const; // How many bytes can be pushed to the stream right now?
   uint64_t bytes_pushed() const;       // Total number of bytes cumulatively pushed to the stream

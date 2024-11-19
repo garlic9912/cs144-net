@@ -1,6 +1,7 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <string>
 
 class Reassembler
 {
@@ -42,4 +43,23 @@ public:
 
 private:
   ByteStream output_; // the Reassembler writes to this ByteStream
+
+  struct Node {
+    uint64_t length;
+    uint64_t first_index;
+    std::string data;
+
+    // 自定义比较函数
+    bool operator<(const Node& other) const {
+        if (first_index != other.first_index) return first_index < other.first_index;
+        return length > other.length;
+    }    
+  };  
+  // 存放还未放入ByteStream的乱序字节流
+  std::set<Node> datablock_ = {};
+  uint64_t reassembler_totalbytes_ = 0;
+  uint64_t least_index_ = 0;  // 当前需要的最低字节index
+  bool is_last_substring_ = false;  // 最后一个字符串是否来过
+  uint64_t bytes_pending_ = 0;  // reassembler中存放的字节数
+  uint64_t max_needed_index_ = 0;  // 需要的最后一个字节的索引
 };
