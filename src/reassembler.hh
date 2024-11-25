@@ -34,6 +34,9 @@ public:
   // How many bytes are stored in the Reassembler itself?
   uint64_t bytes_pending() const;
 
+
+  uint64_t reassembler_totalbytes() const;
+
   // Access output stream reader
   Reader& reader() { return output_.reader(); }
   const Reader& reader() const { return output_.reader(); }

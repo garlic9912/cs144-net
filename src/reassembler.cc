@@ -7,14 +7,14 @@ using namespace std;
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring )
 {
   // 最后一个字符串来过了, 标记需要最大的索引
-  if (is_last_substring && !is_last_substring_) {
+  if (is_last_substring) {
     is_last_substring_ = true;
     max_needed_index_ = first_index + data.length() - 1;
     if (data == "") max_needed_index_ = first_index;
   }  
 
   // 最后一个是空字符串直接关闭即可
-  if(is_last_substring_ && data == "") {
+  if(is_last_substring_ && max_needed_index_ == least_index_ && data == "") {
     output_.writer().close();
   }
 
@@ -76,9 +76,6 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
 
 
   // 目前能否打入ByteStream
-  if (output_.has_error()) printf("Reassembler: ByteStream has error\n");
-  if (datablock_.begin() == datablock_.end()) printf("No element in datablock_\n");
-
   auto it2 = datablock_.begin();
   if (it2->first_index <= least_index_
      && it2->first_index + it2->length - 1 >= least_index_) {
@@ -99,4 +96,10 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
 uint64_t Reassembler::bytes_pending() const
 {
   return bytes_pending_;
+}
+
+
+uint64_t Reassembler::reassembler_totalbytes() const
+{
+  return reassembler_totalbytes_;
 }

@@ -27,4 +27,5 @@ public:
 
 private:
   Reassembler reassembler_;
+  int flag_ = 0;  // 判断第一个字节流（携带SYN）是否到达
 };
