@@ -5,13 +5,15 @@
 #include <span>
 #include <string>
 
+#include "tcp_minnow_socket.hh"
+
 using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
   // host: cs144.keithw.org
   // path: /hello
-  TCPSocket sock;
+  CS144TCPSocket sock;
   sock.connect(Address(host, "http"));
 
   // 构造 HTTP 请求
