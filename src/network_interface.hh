@@ -6,6 +6,8 @@
 #include "ethernet_frame.hh"
 #include "ipv4_datagram.hh"
 
+#include <unordered_map>
+
 // A "network interface" that connects IP (the internet layer, or network layer)
 // with Ethernet (the network access layer, or link layer).
 
@@ -81,4 +83,18 @@ private:
 
   // Datagrams that have been received
   std::queue<InternetDatagram> datagrams_received_ {};
+
+  // 总共的ms数
+  size_t time_ms_ = 0;
+
+  // IP和MAC地址的映射
+  // IP -> (被更新时的time, MAC地址)
+  std::unordered_map<uint32_t, std::pair<size_t, EthernetAddress>> map_ {};
+
+  // 广播的ARP请求
+  // IP -> (被存入的时间, MAC帧)
+  std::unordered_map<uint32_t, std::pair<size_t, EthernetFrame>> arp_send_ {};
+
+  // 排队的datagram
+  std::unordered_map<uint32_t, InternetDatagram> datagrams_waited_ {};
 };
